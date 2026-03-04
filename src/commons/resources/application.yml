@@ -1,0 +1,8 @@
+env: test
+
+some:
+  nested:
+    value: 42
+
+templated:
+  value: ${some.nested.value} is the answer to the Ultimate Question of Life, The Universe, and Everything.
