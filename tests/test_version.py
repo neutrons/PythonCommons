@@ -1,4 +1,4 @@
-from commons import __version__
+from neutrons_standard import __version__
 
 
 def test_version():

@@ -2,7 +2,7 @@
 ### Project Metadata ###
 ########################
 [project]
-name = "commons"
+name = "neutrons_standard"
 description = "Python library repo for atomic software components generally applicable across neutrons repositories."
 dynamic = ["version"]
 requires-python = ">=3.10"
@@ -36,19 +36,19 @@ requires = ["hatchling", "versioningit"]
 source = "versioningit"
 
 [tool.hatch.build.hooks.versioningit-onbuild]
-source-file = "src/commons/_version.py"
-build-file = "commons/_version.py"
+source-file = "src/neutrons_standard/_version.py"
+build-file = "neutrons_standard/_version.py"
 
 [tool.hatch.build]
 artifacts = [
-  "src/commons/_version.py",
-  "src/commons/**/*.yml",
-  "src/commons/**/*.yaml",
-  "src/commons/**/*.ini",
+  "src/neutrons_standard/_version.py",
+  "src/neutrons_standard/**/*.yml",
+  "src/neutrons_standard/**/*.yaml",
+  "src/neutrons_standard/**/*.ini",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/commons"]
+packages = ["src/neutrons_standard"]
 
 [tool.versioningit.vcs]
 method = "git"
@@ -67,7 +67,7 @@ dirty = "{version}"
 distance-dirty = "{next_version}.dev{distance}"
 
 [tool.versioningit.write]
-file = "src/commons/_version.py"
+file = "src/neutrons_standard/_version.py"
 
 ###################
 ### Pixi config ###
@@ -101,7 +101,7 @@ pillow = ">=12.1.1"          # CVE-2026-25990
 
 [tool.pixi.pypi-dependencies]
 # PyPI dependencies, including this package to allow local editable installs
-commons = { path = ".", editable = true }
+neutrons_standard = { path = ".", editable = true }
 jaraco-context = ">=6.1.0"                     # CVE-2026-23949
 
 # Pixi Build configuration - https://pixi.sh/latest/reference/pixi_manifest/#pixi-build
@@ -116,7 +116,7 @@ numpy = "*"
 "ruamel.yaml" = "*"
 
 [tool.pixi.package]
-name = "commons"
+name = "neutrons_standard"
 version = "0.0.0"     # placeholder, overwritten by sync-version
 
 [tool.pixi.package.build]
@@ -211,7 +211,7 @@ reset-toml = { cmd = "cp pyproject.toml.bak pyproject.toml; rm pyproject.toml.ba
 ##############
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=commons --cov-report=term-missing"
+addopts = "-v --cov=neutrons_standard --cov-report=term-missing"
 pythonpath = [".", "src", "scripts"]
 testpaths = ["tests"]
 python_files = ["test*.py"]
@@ -239,7 +239,7 @@ select = ["A", "ARG", "ASYNC", "BLE", "C90", "E", "F", "I", "N", "UP032", "W"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["commons"]
+known-first-party = ["neutrons_standard"]
 
 [tool.ruff.format]
 quote-style = "double"

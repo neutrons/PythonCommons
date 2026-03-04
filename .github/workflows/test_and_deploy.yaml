@@ -8,8 +8,8 @@ on:
     tags: ["v*"]
 
 env:
-  PKG_NAME: commons
-  MODULE_NAME: commons
+  PKG_NAME: neutrons_standard
+  MODULE_NAME: neutrons_standard
 
 # cancel previous job if new commit is pushed
 concurrency:
