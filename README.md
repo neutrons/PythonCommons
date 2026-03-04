@@ -51,8 +51,8 @@ or
 channels = [
   "neutrons",
   "conda-forge",
-  ...
-  "https://prefix.dev/pixi-build-backends", # Required for pixi build
+  "conda-forge",
+  "https://prefix.dev/pixi-build-backends",
 ]
 
 [tool.pixi.dependencies]
