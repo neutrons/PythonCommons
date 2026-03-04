@@ -2,33 +2,21 @@
 ### Project Metadata ###
 ########################
 [project]
-name = "examplepyapp"
-description = "Example Python repo for neutrons"
+name = "commons"
+description = "Python library repo for atomic software components generally applicable across neutrons repositories."
 dynamic = ["version"]
 requires-python = ">=3.10"
 license = { text = "MIT" }
-keywords = ["neutrons", "example", "python"]
+keywords = ["neutrons", "common", "python",  "library", "utils"]
 readme = "README.md"
 
 dependencies = [
   # Dependencies available from both PyPI and conda should be listed here
   "numpy>=2.2,<3",
-  "QtPy",
-  "PyQt5",
-  "pyqtgraph",
-  # Dependencies only available from PyPI
-  "bm3d-streak-removal>=0.2.0,<0.3",
-  "pytest-playwright>=0.7.0,<0.8",
 ]
 
 [project.optional-dependencies]
 docs = ["sphinx", "sphinx_rtd_theme", "versioningit", "myst_parser"]
-
-[project.scripts]
-packagename-cli = "packagenamepy.packagename:main"
-
-[project.gui-scripts]
-packagenamepy = "packagenamepy.packagename:gui"
 
 [project.urls]
 homepage = "https://github.com/neutrons/python_project_template/"
@@ -48,19 +36,19 @@ requires = ["hatchling", "versioningit"]
 source = "versioningit"
 
 [tool.hatch.build.hooks.versioningit-onbuild]
-source-file = "src/packagenamepy/_version.py"
-build-file = "packagenamepy/_version.py"
+source-file = "src/commons/_version.py"
+build-file = "commons/_version.py"
 
 [tool.hatch.build]
 artifacts = [
-  "src/packagenamepy/_version.py",
-  "src/packagenamepy/**/*.yml",
-  "src/packagenamepy/**/*.yaml",
-  "src/packagenamepy/**/*.ini",
+  "src/commons/_version.py",
+  "src/commons/**/*.yml",
+  "src/commons/**/*.yaml",
+  "src/commons/**/*.ini",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/packagenamepy"]
+packages = ["src/commons"]
 
 [tool.versioningit.vcs]
 method = "git"
@@ -79,7 +67,7 @@ dirty = "{version}"
 distance-dirty = "{next_version}.dev{distance}"
 
 [tool.versioningit.write]
-file = "src/packagenamepy/_version.py"
+file = "src/commons/_version.py"
 
 ###################
 ### Pixi config ###
@@ -101,12 +89,7 @@ conda-pypi-map = { "conda-forge" = "pixi-mapping.json" }
 [tool.pixi.dependencies]
 # Conda package dependencies
 numpy = "*"
-scipy = "*" # specify derivative dependencies here if you need them from conda
-# GUI
-pyqtgraph = "*"
-qt = "*"
-qtpy = "*"
-pyqt = "*"
+"ruamel.yaml" = "*"
 # pip-audit
 h2 = ">=4.3.0"               # Known vulnerability in <4.3.0
 brotli = ">=1.2.0"
@@ -118,7 +101,7 @@ pillow = ">=12.1.1"          # CVE-2026-25990
 
 [tool.pixi.pypi-dependencies]
 # PyPI dependencies, including this package to allow local editable installs
-examplepyapp = { path = ".", editable = true }
+commons = { path = ".", editable = true }
 jaraco-context = ">=6.1.0"                     # CVE-2026-23949
 
 # Pixi Build configuration - https://pixi.sh/latest/reference/pixi_manifest/#pixi-build
@@ -130,12 +113,10 @@ versioningit = "*"
 [tool.pixi.package.run-dependencies]
 python = ">=3.10"
 numpy = "*"
-QtPy = "*"
-pyqt = "*"
-pyqtgraph = "*"
+"ruamel.yaml" = "*"
 
 [tool.pixi.package]
-name = "examplepyapp"
+name = "commons"
 version = "0.0.0"     # placeholder, overwritten by sync-version
 
 [tool.pixi.package.build]
@@ -150,7 +131,6 @@ default = { features = [
   "package",
   "test",
 ], solve-group = "default" }
-jupyter = { features = ["developer", "jupyter"], solve-group = "jupyter" }
 
 [tool.pixi.feature.test.dependencies]
 pytest = ">=6.2.4,<9.0.0" # constrained to match pytest-playwright requirements
@@ -178,11 +158,6 @@ versioningit = "*"
 sphinx = "*"
 sphinx_rtd_theme = "*"
 myst-parser = "*"
-
-[tool.pixi.feature.jupyter.dependencies]
-jupyterlab = "*"
-ipympl = "*"
-ipywidgets = "*"
 
 [tool.pixi.tasks]
 # Documentation
@@ -236,7 +211,7 @@ reset-toml = { cmd = "cp pyproject.toml.bak pyproject.toml; rm pyproject.toml.ba
 ##############
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=packagenamepy --cov-report=term-missing"
+addopts = "-v --cov=commons --cov-report=term-missing"
 pythonpath = [".", "src", "scripts"]
 testpaths = ["tests"]
 python_files = ["test*.py"]
@@ -264,7 +239,7 @@ select = ["A", "ARG", "ASYNC", "BLE", "C90", "E", "F", "I", "N", "UP032", "W"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["packagenamepy"]
+known-first-party = ["commons"]
 
 [tool.ruff.format]
 quote-style = "double"

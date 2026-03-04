@@ -7,6 +7,9 @@ Welcome to python project template docs!
    :caption: Contents:
 
    README
+   config
+   singleton
+   time
 
 =========================================
 Indices and tables
