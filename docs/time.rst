@@ -1,6 +1,6 @@
-====================
+=======================
 Time Utilities (time)
-====================
+=======================
 
 High-precision timestamp generation, parsing, and ISO 8601 formatting with nanosecond accuracy.
 
