@@ -1,6 +1,6 @@
-================================
+====================================
 Configuration Management (Config)
-================================
+====================================
 
 YAML-based configuration system with environment layering, deep merging, token substitution, and automatic backup.
 
