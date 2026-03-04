@@ -1,6 +1,6 @@
-==========================
+=============================
 Singleton Decorator Pattern
-==========================
+=============================
 
 Ensures only one instance of a decorated class exists throughout application lifecycle.
 
