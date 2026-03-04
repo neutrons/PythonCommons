@@ -9,7 +9,7 @@ Quick Reference
 
 .. code-block:: python
 
-    from commons.time import timestamp, parseTimestamp, isoFromTimestamp
+    from neutrons_standard.time import timestamp, parseTimestamp, isoFromTimestamp
     
     # Generate timestamps
     ts = timestamp()                              # Current time (float seconds)
@@ -86,7 +86,7 @@ Event Logging
 
 .. code-block:: python
 
-    from commons.time import timestamp, isoFromTimestamp
+    from neutrons_standard.time import timestamp, isoFromTimestamp
     
     events = []
     for event_type in ["login", "query", "logout"]:
@@ -101,7 +101,7 @@ Performance Measurement
 
 .. code-block:: python
 
-    from commons.time import timestamp
+    from neutrons_standard.time import timestamp
     
     start = timestamp()
     perform_operation()
@@ -113,7 +113,7 @@ Timestamp Conversion Round-Trip
 
 .. code-block:: python
 
-    from commons.time import timestamp, isoFromTimestamp, parseTimestamp
+    from neutrons_standard.time import timestamp, isoFromTimestamp, parseTimestamp
     
     # Original timestamp
     ts1 = timestamp()
@@ -130,7 +130,7 @@ Configuration Backup Timestamping
 
 .. code-block:: python
 
-    from commons.time import isoFromTimestamp, timestamp
+    from neutrons_standard.time import isoFromTimestamp, timestamp
     from pathlib import Path
     
     def backup_file(filepath):
@@ -147,7 +147,7 @@ Audit Trails
 
 .. code-block:: python
 
-    from commons.time import timestamp, isoFromTimestamp
+    from neutrons_standard.time import timestamp, isoFromTimestamp
     
     class AuditLog:
         def __init__(self):
@@ -169,7 +169,7 @@ Time Series Data
 
 .. code-block:: python
 
-    from commons.time import timestamp, isoFromTimestamp
+    from neutrons_standard.time import timestamp, isoFromTimestamp
     
     class TimeSeries:
         def __init__(self):
@@ -193,7 +193,7 @@ Database Integration
 
 .. code-block:: python
 
-    from commons.time import timestamp, isoFromTimestamp, parseTimestamp
+    from neutrons_standard.time import timestamp, isoFromTimestamp, parseTimestamp
     
     class DatabaseRecord:
         def __init__(self, data):
@@ -234,7 +234,7 @@ With ``ensureUnique=True``, timestamps strictly increase even in same second:
 
 .. code-block:: python
 
-    from commons.time import timestamp
+    from neutrons_standard.time import timestamp
     
     times = [timestamp(ensureUnique=True) for _ in range(100)]
     

@@ -9,7 +9,7 @@ Quick Reference
 
 .. code-block:: python
 
-    from commons.decorators.singleton import Singleton, reset_Singletons
+    from neutrons_standard.decorators.singleton import Singleton, reset_Singletons
     
     @Singleton
     class MyService:
@@ -96,7 +96,7 @@ Reset all singletons:
 
 .. code-block:: python
 
-    from commons.decorators.singleton import reset_Singletons
+    from neutrons_standard.decorators.singleton import reset_Singletons
     
     reset_Singletons()                      # Reset all
     reset_Singletons(fully_unwrap=True)     # Fully unwrap all
@@ -110,7 +110,7 @@ Pytest Fixture
 .. code-block:: python
 
     import pytest
-    from commons.decorators.singleton import reset_Singletons
+    from neutrons_standard.decorators.singleton import reset_Singletons
     
     @pytest.fixture(autouse=True)
     def reset_all_singletons():
@@ -201,7 +201,7 @@ Configuration Objects
 
 .. code-block:: python
 
-    from commons import Config  # Already a Singleton
+    from neutrons_standard import Config  # Already a Singleton
     
     # Config is single instance across app
     cfg = Config

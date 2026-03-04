@@ -56,18 +56,18 @@ channels = [
 ]
 
 [tool.pixi.dependencies]
-commons = "*"
+neutrons_standard = "*"
 
 [tool.pixi.package.run-dependencies]
-commons = "*"
+neutrons_standard = "*"
 ```
 
 Then import utilities:
 
 ```python
-from commons import Config
-from commons.decorators.singleton import Singleton
-from commons.time import timestamp, isoFromTimestamp
+from neutrons_standard import Config
+from neutrons_standard.decorators.singleton import Singleton
+from neutrons_standard.time import timestamp, isoFromTimestamp
 ```
 
 See [`readthedocs`](https://pythoncommons.readthedocs.io/en/latest/) for detailed documentation on each module.
@@ -114,7 +114,7 @@ Output will be in `docs/_build/html/`.
 
 ```
 PythonCommons/
-├── src/commons/              # Main package
+├── src/neutrons_standard/              # Main package
 │   ├── config.py             # Configuration management
 │   ├── time.py               # Time utilities
 │   └── decorators/

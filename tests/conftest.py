@@ -3,10 +3,10 @@
 import os
 import pytest
 
-import commons
-from commons.decorators.singleton import reset_Singletons
+import neutrons_standard
+from neutrons_standard.decorators.singleton import reset_Singletons
 
-commons.init("commons")
+neutrons_standard.init("neutrons_standard")
 
 if not os.environ.get("env"):
     os.environ["env"] = "test"
