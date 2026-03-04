@@ -2,60 +2,72 @@
 Singleton Decorator Pattern
 ==========================
 
-The ``Singleton`` decorator provides a lightweight implementation of the Singleton design pattern, ensuring that only one instance of a decorated class exists throughout the application lifecycle.
+Ensures only one instance of a decorated class exists throughout application lifecycle.
 
-Overview
-========
-
-The ``@Singleton`` decorator transforms a class so that all calls to its constructor return the same object instance. This is particularly useful for shared resources, configuration objects, and stateful managers where a single instance must be maintained across the application.
-
-Basic Usage
-===========
-
-Apply the ``@Singleton`` decorator to any class:
+Quick Reference
+===============
 
 .. code-block:: python
 
-    from commons.decorators.singleton import Singleton
+    from commons.decorators.singleton import Singleton, reset_Singletons
     
+    @Singleton
+    class MyService:
+        def __init__(self):
+            self.state = {}
+    
+    # All references point to same instance
+    s1 = MyService()
+    s2 = MyService()
+    assert s1 is s2  # True
+    
+    # Testing: reset before each test
+    MyService._reset_Singleton()                 # Reset one singleton
+    reset_Singletons()                           # Reset all singletons
+    reset_Singletons(fully_unwrap=True)          # Remove decorator behavior
+
+Basic Usage
+-----------
+
+.. code-block:: python
+
     @Singleton
     class DatabaseConnection:
         def __init__(self):
             self.connection = self._connect()
         
         def _connect(self):
-            # Initialization happens only once
-            return "Connected to database"
+            return "Connected"
     
-    # All references point to the same instance
     db1 = DatabaseConnection()
     db2 = DatabaseConnection()
     
-    assert db1 is db2  # True - same object in memory
+    assert db1 is db2  # Same object
+    assert db1 is not DatabaseConnection()  # Never creates new instances
 
-Key Characteristics
-===================
+Key Behaviors
+=============
 
-Single Instance Guarantee
--------------------------
+Single Instance
+---------------
 
-Only one instance of the class is ever created:
+Only one object created, all calls reuse it:
 
 .. code-block:: python
 
     @Singleton
     class Logger:
         def __init__(self):
-            print("Logger initialized")
+            print("Initialized")
     
-    logger1 = Logger()  # Prints "Logger initialized"
-    logger2 = Logger()  # Does NOT print - reuses existing instance
-    logger3 = Logger()  # Does NOT print - reuses existing instance
+    Logger()  # Prints "Initialized"
+    Logger()  # No print - reuses existing
+    Logger()  # No print - reuses existing
 
 Initialization Guard
 --------------------
 
-The ``__init__`` method only runs during first instantiation:
+``__init__`` runs only on first instantiation, skipped on subsequent calls:
 
 .. code-block:: python
 
@@ -63,68 +75,37 @@ The ``__init__`` method only runs during first instantiation:
     class Counter:
         def __init__(self):
             self.count = 0
-            print("Counter created")
-        
-        def increment(self):
-            self.count += 1
     
-    c1 = Counter()      # Prints "Counter created", count = 0
-    c2 = Counter()      # Does NOT print, reuses c1
-    c2.increment()      # Increments shared instance
+    c1 = Counter()
+    c1.count = 5
     
-    assert c1.count == 1  # True - same object
+    c2 = Counter()  # __init__ not called
+    c2.count        # 5, not 0 - same instance
 
-API Reference
-=============
+Reset and Testing
+-----------------
 
-@Singleton Decorator
---------------------
+Reset individual singleton (allows re-initialization):
 
 .. code-block:: python
 
-    from commons.decorators.singleton import Singleton
-    
-    @Singleton
-    class MyClass:
-        pass
+    MyClass._reset_Singleton()              # Next call creates new instance
+    MyClass._reset_Singleton(fully_unwrap=True)  # Remove Singleton behavior
 
-Decorates a class to ensure only one instance is ever created.
-
-Reset Methods
--------------
-
-Individual Singleton Reset
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    # Reset a specific Singleton (allows new initialization on next use)
-    MyClass._reset_Singleton()
-    
-    # Reset and fully unwrap the decorator (remove Singleton behavior)
-    MyClass._reset_Singleton(fully_unwrap=True)
-
-After resetting, the next instantiation will create a new instance and run ``__init__`` again.
-
-Global Reset
-^^^^^^^^^^^^
+Reset all singletons:
 
 .. code-block:: python
 
     from commons.decorators.singleton import reset_Singletons
     
-    # Reset all Singletons in the application
-    reset_Singletons()
-    
-    # Reset all and fully unwrap decorators
-    reset_Singletons(fully_unwrap=True)
+    reset_Singletons()                      # Reset all
+    reset_Singletons(fully_unwrap=True)     # Fully unwrap all
 
-This resets all classes decorated with ``@Singleton``, allowing them to be reinitialized on next use.
+Examples
+========
 
-Testing and Fixtures
-====================
-
-The Singleton decorator provides built-in support for pytest fixtures through reset methods:
+Pytest Fixture
+--------------
 
 .. code-block:: python
 
@@ -132,54 +113,39 @@ The Singleton decorator provides built-in support for pytest fixtures through re
     from commons.decorators.singleton import reset_Singletons
     
     @pytest.fixture(autouse=True)
-    def reset_singletons():
-        """Reset all singletons before each test."""
+    def reset_all_singletons():
+        """Fresh instance for each test."""
         reset_Singletons()
         yield
         reset_Singletons()
     
-    def test_singleton_independence():
-        # Each test gets a fresh instance
+    def test_one():
         obj1 = MyClass()
         obj1.value = "test1"
-        
-        # Fixture ensures next test gets new instance
     
-    def test_another_singleton():
-        # This gets a fresh instance, not the one from previous test
+    def test_two():
         obj2 = MyClass()
-        assert obj2.value != "test1"  # Different instance
+        assert obj2.value != "test1"  # Fresh instance
 
-For more granular control:
+Selective Reset
+---------------
 
 .. code-block:: python
 
     @pytest.fixture
     def fresh_database():
-        """Provide a fresh database instance for this test."""
+        """Fresh database instance."""
         DatabaseConnection._reset_Singleton()
         db = DatabaseConnection()
         yield db
         DatabaseConnection._reset_Singleton()
+    
+    def test_with_fresh_db(fresh_database):
+        # fresh_database is guaranteed new instance
+        pass
 
 Use Cases
 =========
-
-Configuration Management
-------------------------
-
-.. code-block:: python
-
-    from commons.decorators.singleton import Singleton
-    from commons import Config
-    
-    # Config is a Singleton - only one configuration object
-    from commons import Config
-    
-    # All parts of the application share the same config
-    config1 = Config
-    config2 = Config
-    assert config1 is config2
 
 Shared Resource Pools
 ---------------------
@@ -189,18 +155,12 @@ Shared Resource Pools
     @Singleton
     class ConnectionPool:
         def __init__(self):
-            self.connections = []
-            self._initialize_pool()
-        
-        def _initialize_pool(self):
-            # Create connection pool once
-            for i in range(10):
-                self.connections.append(self._create_connection())
+            self.connections = self._create_pool(10)
         
         def get_connection(self):
-            return self.connections.pop() if self.connections else None
+            return self.connections.pop()
     
-    # Entire application uses the same pool
+    # Entire app shares same pool
     pool = ConnectionPool()
 
 Logging and Monitoring
@@ -212,16 +172,15 @@ Logging and Monitoring
     class ApplicationLogger:
         def __init__(self):
             self.messages = []
-            self.level = "INFO"
         
-        def log(self, message):
-            self.messages.append(message)
+        def log(self, msg):
+            self.messages.append(msg)
     
-    # All modules log to the same instance
+    # All modules log to same instance
     logger = ApplicationLogger()
 
-State Managers
---------------
+State Management
+----------------
 
 .. code-block:: python
 
@@ -231,36 +190,32 @@ State Managers
             self.sessions = {}
             self.current_user = None
         
-        def create_session(self, user_id):
-            self.sessions[user_id] = {"created": time.time()}
-        
-        def get_current_user(self):
-            return self.current_user
+        def set_user(self, user):
+            self.current_user = user
     
-    # Maintains application state across all modules
-    session_mgr = SessionManager()
+    # Application-wide state
+    mgr = SessionManager()
 
-Implementation Details
-======================
+Configuration Objects
+---------------------
 
-How It Works
-------------
+.. code-block:: python
 
-The ``@Singleton`` decorator intercepts the class's ``__new__`` and ``__init__`` methods:
+    from commons import Config  # Already a Singleton
+    
+    # Config is single instance across app
+    cfg = Config
+    cfg.reload()
+    host = cfg["database.host"]
 
-1. **First instantiation**: ``__new__`` creates the instance, ``__init__`` runs
-2. **Subsequent instantiations**: ``__new__`` returns existing instance, ``__init__`` is skipped
-3. **State preservation**: The instance's state persists between calls
+Thread Safety
+=============
 
-Thread Safety Considerations
-----------------------------
-
-The current implementation is **not inherently thread-safe**. For multi-threaded applications:
+Not thread-safe by default. For multi-threaded use, add locking:
 
 .. code-block:: python
 
     import threading
-    from commons.decorators.singleton import Singleton
     
     @Singleton
     class ThreadSafeResource:
@@ -272,15 +227,11 @@ The current implementation is **not inherently thread-safe**. For multi-threaded
             with self.lock:
                 self.data.append(value)
 
-If thread safety is critical, manage locks within the Singleton class itself.
-
 Common Patterns
 ===============
 
 Lazy Initialization
 -------------------
-
-Combine Singleton with lazy loading:
 
 .. code-block:: python
 
@@ -291,11 +242,11 @@ Combine Singleton with lazy loading:
         
         def get_resource(self):
             if self.resource is None:
-                self.resource = self._load_expensive_resource()
+                self.resource = self._load()
             return self.resource
 
-Factory Pattern with Singleton
--------------------------------
+Service Factory
+---------------
 
 .. code-block:: python
 
@@ -304,46 +255,37 @@ Factory Pattern with Singleton
         def __init__(self):
             self.services = {}
         
-        def register_service(self, name, service):
+        def register(self, name, service):
             self.services[name] = service
         
-        def get_service(self, name):
+        def get(self, name):
             return self.services.get(name)
 
-Best Practices
-==============
+Pitfalls
+========
 
-1. **Use for truly global state**: Only apply Singleton to classes that represent application-wide shared resources
-2. **Document singleton behavior**: Clearly mark Singleton classes in documentation and code comments
-3. **Reset in tests**: Always reset Singletons between tests to avoid state leakage
-4. **Avoid over-use**: Too many Singletons can make code harder to test and reason about
-5. **Thread-safe access**: If used in multi-threaded contexts, add synchronization within the Singleton class
-6. **Initialization errors**: Handle errors in ``__init__`` carefully—failure prevents proper initialization
+State Pollution Between Tests
+-----------------------------
 
-Common Pitfalls
-===============
+Always reset singletons in test fixtures to prevent state leakage between tests.
 
-Mutable Default State
----------------------
+Over-Use
+--------
+
+Too many singletons make code harder to test and reason about. Use when truly needed for application-wide shared resources.
+
+Mutable Class Variables
+-----------------------
 
 .. code-block:: python
 
+    # Bad - shared mutable
     @Singleton
-    class BadCounter:
-        count = []  # Shared mutable default - can be modified externally
+    class BadClass:
+        items = []  # Shared across all
     
-    # Better:
+    # Good - instance variable
     @Singleton
-    class GoodCounter:
+    class GoodClass:
         def __init__(self):
-            self.count = 0  # Instance variable, not class variable
-
-State Pollution Between Tests
-------------------------------
-
-Always reset Singletons in test fixtures to prevent state from one test affecting another.
-
-Hidden Dependencies
--------------------
-
-Avoid Singletons with complex initialization that has side effects, as it can make debugging difficult.
+            self.items = []
