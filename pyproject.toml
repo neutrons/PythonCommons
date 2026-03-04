@@ -18,12 +18,6 @@ dependencies = [
 [project.optional-dependencies]
 docs = ["sphinx", "sphinx_rtd_theme", "versioningit", "myst_parser"]
 
-[project.scripts]
-packagename-cli = "packagenamepy.packagename:main"
-
-[project.gui-scripts]
-packagenamepy = "packagenamepy.packagename:gui"
-
 [project.urls]
 homepage = "https://github.com/neutrons/python_project_template/"
 repository = "https://github.com/neutrons/python_project_template/"
@@ -42,19 +36,19 @@ requires = ["hatchling", "versioningit"]
 source = "versioningit"
 
 [tool.hatch.build.hooks.versioningit-onbuild]
-source-file = "src/packagenamepy/_version.py"
-build-file = "packagenamepy/_version.py"
+source-file = "src/commons/_version.py"
+build-file = "commons/_version.py"
 
 [tool.hatch.build]
 artifacts = [
-  "src/packagenamepy/_version.py",
-  "src/packagenamepy/**/*.yml",
-  "src/packagenamepy/**/*.yaml",
-  "src/packagenamepy/**/*.ini",
+  "src/commons/_version.py",
+  "src/commons/**/*.yml",
+  "src/commons/**/*.yaml",
+  "src/commons/**/*.ini",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/packagenamepy"]
+packages = ["src/commons"]
 
 [tool.versioningit.vcs]
 method = "git"
@@ -73,7 +67,7 @@ dirty = "{version}"
 distance-dirty = "{next_version}.dev{distance}"
 
 [tool.versioningit.write]
-file = "src/packagenamepy/_version.py"
+file = "src/commons/_version.py"
 
 ###################
 ### Pixi config ###
@@ -217,7 +211,7 @@ reset-toml = { cmd = "cp pyproject.toml.bak pyproject.toml; rm pyproject.toml.ba
 ##############
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=packagenamepy --cov-report=term-missing"
+addopts = "-v --cov=commons --cov-report=term-missing"
 pythonpath = [".", "src", "scripts"]
 testpaths = ["tests"]
 python_files = ["test*.py"]
@@ -245,7 +239,7 @@ select = ["A", "ARG", "ASYNC", "BLE", "C90", "E", "F", "I", "N", "UP032", "W"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["packagenamepy"]
+known-first-party = ["commons"]
 
 [tool.ruff.format]
 quote-style = "double"
