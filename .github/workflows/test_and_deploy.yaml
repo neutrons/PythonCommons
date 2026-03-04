@@ -8,8 +8,8 @@ on:
     tags: ["v*"]
 
 env:
-  PKG_NAME: examplepyapp
-  MODULE_NAME: packagenamepy
+  PKG_NAME: commons
+  MODULE_NAME: commons
 
 # cancel previous job if new commit is pushed
 concurrency:
