@@ -12,11 +12,11 @@ from tempfile import TemporaryDirectory
 from unittest import mock
 
 import pytest
-from commons import Spec
+from neutrons_standard import Spec
 from ruamel.yaml import YAML as rYaml
 
-import commons.config as Config_module
-from commons.config import (
+import neutrons_standard.config as Config_module
+from neutrons_standard.config import (
     Config,
     DeployEnvEnum,
     Resource,
@@ -57,7 +57,7 @@ def test_find_root_dir_special_test_env():
 @mock.patch.dict(sys.modules, clear=True)
 def test_find_root_dir_failure():
     # Test that not being able to define the `MODULE_ROOT` raises an exception.
-    with pytest.raises(Exception, match="Unable to determine commons module-root directory"):
+    with pytest.raises(Exception, match="Unable to determine neutrons_standard module-root directory"):
         _find_root_dir()
 
 def test_resource_packageMode(caplog):
@@ -83,7 +83,7 @@ def test_resource_packageMode(caplog):
 
         # Trigger a fresh import for the "Config" module.
         del sys.modules[f"{package_name}.config"]
-        from commons.config import _Resource
+        from neutrons_standard.config import _Resource
 
         # `@Singleton` is now active for tests:
         #    we need to reset it, so that we can recreate the class.
@@ -110,7 +110,7 @@ def test_resource_not_packageMode(caplog):
         # Trigger a fresh import for the "Config" module.
         del sys.modules[f"{package_name}.config"]
         with caplog.at_level(logging.DEBUG, logger=f"{package_name}.config.Resource"):
-            from commons.config import _Resource
+            from neutrons_standard.config import _Resource
 
             rs = _Resource()
             assert not rs._package_mode
@@ -137,7 +137,7 @@ def test_resource_packageMode_exists():
 
         # Trigger a fresh import for the "Config" module.
         del sys.modules[f"{package_name}.config"]
-        from commons.config import _Resource
+        from neutrons_standard.config import _Resource
 
         # `@Singleton` is now active for tests:
         #    we need to reset it, so that we can recreate the class.
@@ -248,7 +248,7 @@ def test_packageVersion_empty():
         mock.patch.object(Config_module, "app_version", ""),
     ):
         mockSubprocess.check_output.return_value = b""
-        with pytest.raises(ValueError, match="The commons Version is not set correctly."):
+        with pytest.raises(ValueError, match="The neutrons_standard Version is not set correctly."):
             Config.packageVersion()
 
 

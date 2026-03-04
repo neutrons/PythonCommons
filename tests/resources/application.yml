@@ -9,7 +9,7 @@ templated:
 
 user:
   application:
-      home: ~/.commons/
+      home: ~/.neutrons_standard/
 
 test:
   multi-substitution:

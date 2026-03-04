@@ -9,7 +9,7 @@ Quick Reference
 
 .. code-block:: python
 
-    from commons import Config
+    from neutrons_standard import Config
     
     # Access values
     Config["database.host"]                      # Dot-delimited lookup
@@ -169,7 +169,7 @@ Basic Usage
 
 .. code-block:: python
 
-    from commons import Config
+    from neutrons_standard import Config
     
     # Read values
     host = Config["database.host"]

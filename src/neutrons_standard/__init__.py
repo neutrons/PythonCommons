@@ -1,6 +1,6 @@
 """Contains the entry point for the application"""
 
-from commons.decorators.singleton import Singleton
+from neutrons_standard.decorators.singleton import Singleton
 
 
 try:
