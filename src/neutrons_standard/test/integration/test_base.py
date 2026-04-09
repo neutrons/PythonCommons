@@ -18,7 +18,7 @@ class IntegrationTest:
         faulthandler.disable()
 
         if self.test_summary is None:
-            raise RuntimeError("Integration test failed to initialize self.test_summary.")
+            raise RuntimeError("Integration test failed to initialize self.test_summary.  Every integration test must build its own TestSummary object.")
         
         if isinstance(self.test_summary, TestSummary):
             if not self.test_summary.isComplete():
