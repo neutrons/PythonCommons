@@ -165,6 +165,7 @@ build-docs = { cmd = 'sphinx-build -b html docs docs/_build', description = "Bui
 test-docs = { cmd = "sphinx-build -M doctest docs docs/_build", description = "Test building the documentation" }
 # Testing
 test = { description = "Run the test suite", cmd = "pytest" }
+integration-test = { description = "Run the integration test suite", cmd = "pytest -m integration" }
 # Packaging
 pypi-sdist = { cmd = "hatch build -t sdist", description = "Build the source distribution (tar.gz)" }
 pypi-wheel = { cmd = "hatch build -t wheel", description = "Build the wheel distribution" }
@@ -211,7 +212,7 @@ reset-toml = { cmd = "cp pyproject.toml.bak pyproject.toml; rm pyproject.toml.ba
 ##############
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=neutrons_standard --cov-report=term-missing"
+addopts = "-m 'not (integration)' -v --cov=neutrons_standard --cov-report=term-missing"
 pythonpath = [".", "src", "scripts"]
 testpaths = ["tests"]
 python_files = ["test*.py"]
@@ -223,7 +224,7 @@ norecursedirs = [
   "*dataset*",
   "*data_set*",
 ]
-markers = ["mymarker: example markers goes here"]
+markers = ["integration: mark a test as an integration test"]
 
 ############
 ### Ruff ###
