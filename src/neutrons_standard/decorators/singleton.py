@@ -29,7 +29,7 @@ def Singleton(orig_cls) -> Any:  # noqa:  ANN001
             # while object.__new__ accepts only cls.
             try:
                 instance = orig_new(cls, *args, **kwargs)
-            except TypeError:
+            except RuntimeWarning:
                 instance = orig_new(cls)
         return instance
 
