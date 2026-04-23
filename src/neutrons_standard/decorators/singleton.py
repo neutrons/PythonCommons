@@ -22,11 +22,15 @@ def Singleton(orig_cls) -> Any:  # noqa:  ANN001
         orig_init(self, *args, **kwargs)
 
     @wraps(orig_cls.__new__)
-    def __new__(cls, *args, **kwargs) -> Any:  # noqa: ARG001, ANN001, ANN002, ANN003
+    def __new__(cls, *args, **kwargs) -> Any:  # noqa: ANN001, ANN002, ANN003
         nonlocal instance
         if instance is None:
-            # this needs to work with object.__new__, which only has only the `cls` arg
-            instance = orig_new(cls)  # , *args, **kwargs)
+            # Some classes (for example bindings-backed types) require args in __new__,
+            # while object.__new__ accepts only cls.
+            try:
+                instance = orig_new(cls, *args, **kwargs)
+            except TypeError:
+                instance = orig_new(cls)
         return instance
 
     def _reset_Singleton(*, fully_unwrap: bool = False) -> None:
